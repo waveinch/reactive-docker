@@ -413,7 +413,7 @@ object Formats {
 
   implicit val imageFmt: Format[DockerImage] = Format(
     ((__ \ "Id").read[String] and
-      (__ \ "ParentId").read[Option[String]] and
+      (__ \ "ParentId").readNullable[String] and
       (__ \ "RepoTags").readNullable[Seq[RepositoryTag]] and
       (__ \ "Created").read[Long].map(new org.joda.time.DateTime(_)) and
       (__ \ "Size").read[Long] and
