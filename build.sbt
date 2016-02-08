@@ -2,7 +2,7 @@ organization := "org.almoehi"
 
 name := "reactive-docker"
 
-version := "0.1-SNAPSHOT"
+version := "0.7-SNAPSHOT-wi"
 
 scalaVersion := "2.11.6"
 
@@ -16,10 +16,10 @@ publishMavenStyle := true
 
 publishTo <<= version { (v: String) =>
   val nexus = "https://oss.sonatype.org/"
-  if (v.trim.endsWith("SNAPSHOT")) 
-    Some("snapshots" at nexus + "content/repositories/snapshots") 
+  if (v.trim.endsWith("SNAPSHOT"))
+    Some(Resolver.sftp("wavein.ch", "wavein.ch", "/srv/maven") as("maven","maven2014"))
   else
-    Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+    Some(Resolver.sftp("wavein Repo", "wavein.ch", "/srv/maven") as("maven","maven2014"))
 }
 
 parallelExecution in Test := false
@@ -54,7 +54,7 @@ scalacOptions ++= Seq("-deprecation","-language:_")
 // scalacOptions in (Compile, console) += "-Xlog-implicits"
 
 
-  javacOptions ++= Seq("-target", "1.6", "-source","1.6")
+javacOptions ++= Seq("-target", "1.8", "-source","1.8")
 
 val logbackVer = "1.0.9"
 
@@ -64,11 +64,12 @@ libraryDependencies ++= Seq(
             "com.typesafe.play" %% "play-json" % "2.4.3",
             "com.typesafe.play" %% "play-iteratees" % "2.4.3",
             // "com.typesafe.akka" %% "akka-actor" % "2.4-SNAPSHOT",
-            "net.databinder.dispatch" %% "dispatch-core" % "0.11.2",
+            "net.databinder.dispatch" %% "dispatch-core" % "0.11.3",
             "org.specs2" %% "specs2" % "2.4.2" % "test",
             "ch.qos.logback" % "logback-core" % logbackVer,
             "ch.qos.logback" % "logback-classic" % logbackVer,
-            "org.apache.commons" % "commons-compress" % "1.8.1"
+            "org.apache.commons" % "commons-compress" % "1.8.1",
+            "com.ning" % "async-http-client" % "1.9.11"
   )
 
 // see https://github.com/typesafehub/scalalogging/issues/23

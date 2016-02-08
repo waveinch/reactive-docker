@@ -24,7 +24,8 @@ sealed case class ContainerConfiguration(
     exposedPorts: Option[Map[String, DockerPortBinding]] = None,
     entryPoint: Option[Seq[String]] = None,
     networkDisabled: Option[Boolean] = Some(false),
-    onBuild: Option[Seq[String]] = None
+    onBuild: Option[Seq[String]] = None,
+    restartPolicy: Option[ContainerRestartPolicy] = None
 ) extends DockerEntity
 
 object ContainerConfig {

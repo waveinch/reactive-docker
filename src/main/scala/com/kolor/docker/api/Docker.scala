@@ -153,7 +153,7 @@ sealed trait DockerClient extends DockerApi {
 	          iteratee = null
 	          // Must close underlying connection, otherwise async http client will drain the stream
 	          log.debug(s"${req.url} doneOrError - closing connection")
-	          bodyPart.markUnderlyingConnectionAsClosed()
+	          bodyPart.markUnderlyingConnectionAsToBeClosed()
 	          STATE.ABORT
 	        }    	    
     	  }

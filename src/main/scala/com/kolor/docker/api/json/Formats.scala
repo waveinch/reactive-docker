@@ -329,7 +329,8 @@ object Formats {
       } and
       (__ \ "Entrypoint").readNullable[Seq[String]] and
       (__ \ "NetworkDisabled").readNullable[Boolean] and
-      (__ \ "OnBuild").readNullable[Seq[String]])(ContainerConfiguration.apply _),
+      (__ \ "OnBuild").readNullable[Seq[String]] and
+        (__ \ "RestartPolicy").readNullable[ContainerRestartPolicy])(ContainerConfiguration.apply _),
     (
       (__ \ "Image").writeNullable[String] and
       (__ \ "Cmd").writeNullable[Seq[String]] and
@@ -352,7 +353,8 @@ object Formats {
       (__ \ "ExposedPorts").writeNullable[Map[String, DockerPortBinding]](containerConfigPortBindingWrite) and
       (__ \ "Entrypoint").writeNullable[Seq[String]] and
       (__ \ "NetworkDisabled").writeNullable[Boolean] and
-      (__ \ "OnBuild").writeNullable[Seq[String]])(unlift(ContainerConfiguration.unapply)))
+      (__ \ "OnBuild").writeNullable[Seq[String]] and
+        (__ \ "RestartPolicy").writeNullable[ContainerRestartPolicy])(unlift(ContainerConfiguration.unapply)))
 
   implicit val containerInfoFmt = Format(
     (
