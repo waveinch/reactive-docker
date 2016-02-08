@@ -2,7 +2,7 @@ organization := "org.almoehi"
 
 name := "reactive-docker"
 
-version := "0.9-SNAPSHOT-wi"
+version := "0.10-SNAPSHOT-wi"
 
 scalaVersion := "2.11.6"
 
