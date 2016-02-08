@@ -9,8 +9,9 @@ object Endpoints {
 
   implicit protected def host(implicit docker: DockerClient) = docker.dockerHost
   implicit protected def port(implicit docker: DockerClient) = docker.dockerPort
+  implicit protected def apiVersion(implicit docker: DockerClient) = docker.dockerApiVersion
   
-  def baseUri(implicit docker: DockerClient): Uri = (s"http://$host:$port")
+  def baseUri(implicit docker: DockerClient): Uri = (s"http://$host:$port/v$apiVersion/")
   
   def dockerInfo(implicit docker: DockerClient): Uri = {
     baseUri / "info"

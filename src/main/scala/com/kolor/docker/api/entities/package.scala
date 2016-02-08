@@ -66,8 +66,7 @@ package object entities {
   }
 
   case class ContainerRestartPolicy(
-    name: String,
-    maximumRetryCount: Int) extends DockerEntity
+    Name: String) extends DockerEntity
 
   case class ContainerHostConfiguration(
     privileged: Boolean = false,

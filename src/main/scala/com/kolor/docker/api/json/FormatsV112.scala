@@ -49,10 +49,10 @@ object FormatsV112 {
     }
   }
 
-  // Json writer to serialize DockerVolumes into string array 
+  // Json writer to serialize DockerVolumes into string array
   implicit val dockerVolumeFmt = Json.format[DockerVolume]
 
-    
+
   val dateTimeToIsoWrite: Writes[org.joda.time.DateTime] = new Writes[org.joda.time.DateTime] {
     def writes(dt: org.joda.time.DateTime): JsValue = JsString(org.joda.time.format.ISODateTimeFormat.dateTime().print(dt))
   }
@@ -112,8 +112,8 @@ object FormatsV112 {
       (__ \ "total").read[Int] and
       (__ \ "start").readNullable[Long].map(_.map(new org.joda.time.DateTime(_))))(DockerProgressInfo.apply _),
     Json.writes[DockerProgressInfo])
-    
-    
+
+
   implicit val dockerStatusMessageFmt = Format(
     (
       ((__ \ "id").readNullable[String]) and
@@ -125,7 +125,7 @@ object FormatsV112 {
       ((__ \ "errorDetail").read[DockerErrorInfo].map(e => Some(e)) or (__ \ "error").readNullable[String].map(_.map(err => DockerErrorInfo(message = Some(err)))))
     )(DockerStatusMessage.apply _),
     Json.writes[DockerStatusMessage])
-    
+
   implicit val dockerImageSearchResultFmt = Format(
     (
       (__ \ "name").read[String] and
@@ -287,7 +287,7 @@ object FormatsV112 {
       (__ \ "Entrypoint").readNullable[Seq[String]] and
       (__ \ "NetworkDisabled").readNullable[Boolean] and
       (__ \ "OnBuild").readNullable[Seq[String]] and
-        (__ \ "HostConfig").readNullable[ContainerHostConfiguration])(ContainerConfiguration.apply _),
+        (__ \ "RestartPolicy").readNullable[ContainerRestartPolicy](Formats.containerRestartPolicyFmt))(ContainerConfiguration.apply _),
     (
       (__ \ "Image").writeNullable[String] and
       (__ \ "Cmd").writeNullable[Seq[String]] and
@@ -311,7 +311,7 @@ object FormatsV112 {
       (__ \ "Entrypoint").writeNullable[Seq[String]] and
       (__ \ "NetworkDisabled").writeNullable[Boolean] and
       (__ \ "OnBuild").writeNullable[Seq[String]] and
-        (__ \ "HostConfig").writeNullable[ContainerHostConfiguration]
+        (__ \ "RestartPolicy").writeNullable[ContainerRestartPolicy](Formats.containerRestartPolicyFmt)
       )(unlift(ContainerConfiguration.unapply)))
 
   implicit val containerInfoFmt = Format(

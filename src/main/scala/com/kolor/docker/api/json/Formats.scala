@@ -85,6 +85,7 @@ object Formats {
   // Json writer to serialize DockerVolumes into string array 
   implicit val dockerVolumeFmt = Json.format[DockerVolume]
 
+  implicit val containerRestartPolicyFmt = Json.format[ContainerRestartPolicy]
     
   val dateTimeToIsoWrite: Writes[org.joda.time.DateTime] = new Writes[org.joda.time.DateTime] {
     def writes(dt: org.joda.time.DateTime): JsValue = JsString(org.joda.time.format.ISODateTimeFormat.dateTime().print(dt))
@@ -188,14 +189,7 @@ object Formats {
       (__ \ "Path").read[String] and
       (__ \ "Kind").read[Int])(ContainerChangelogRecord.apply _),
     Json.writes[ContainerChangelogRecord])
-    
-  implicit val containerRestartPolicyFmt = Format(
-    (
-      (__ \ "Name").read[String] and
-      (__ \ "MaximumRetryCount").read[Int])(ContainerRestartPolicy.apply _),
-    (
-      (__ \ "Name").write[String] and
-      (__ \ "MaximumRetryCount").write[Int])(unlift(ContainerRestartPolicy.unapply)))
+
 
   implicit val portBindFmt = Format(
     (
@@ -280,7 +274,7 @@ object Formats {
       (__ \ "ContainerIdFile").readNullable[String] and
       (__ \ "LxcConf").readNullable[Map[String, String]] and
       (__ \ "NetworkMode").read[ContainerNetworkingMode](ContainerNetworkingModeFormat).orElse(Reads.pure(ContainerNetworkingMode.Default)) and
-      (__ \ "RestartPolicy").readNullable[ContainerRestartPolicy](containerRestartPolicyFmt) and
+      (__ \ "RestartPolicy").readNullable[ContainerRestartPolicy] and
       (__ \ "PortBindings").readNullable[Map[String, JsObject]].map { opt =>
         val regex = """^(\d+)/(tcp|udp)$""".r
         opt.map(_.flatMap {
@@ -297,7 +291,7 @@ object Formats {
       (__ \ "ContainerIdFile").writeNullable[String] and
       (__ \ "LxcConf").writeNullable[Map[String, String]] and
       (__ \ "NetworkMode").write[ContainerNetworkingMode](ContainerNetworkingModeFormat) and
-      (__ \ "RestartPolicy").writeNullable[ContainerRestartPolicy](containerRestartPolicyFmt) and      
+      (__ \ "RestartPolicy").writeNullable[ContainerRestartPolicy] and
       (__ \ "PortBindings").writeNullable[Map[String, DockerPortBinding]](hostConfigPortBindingWrite) and
       (__ \ "Links").writeNullable[Seq[String]] and
       (__ \ "CapAdd").write[Seq[String]] and
@@ -332,7 +326,7 @@ object Formats {
       (__ \ "Entrypoint").readNullable[Seq[String]] and
       (__ \ "NetworkDisabled").readNullable[Boolean] and
       (__ \ "OnBuild").readNullable[Seq[String]] and
-        (__ \ "HostConfig").readNullable[ContainerHostConfiguration])(ContainerConfiguration.apply _),
+        (__ \ "RestartPolicy").readNullable[ContainerRestartPolicy])(ContainerConfiguration.apply _),
     (
       (__ \ "Image").writeNullable[String] and
       (__ \ "Cmd").writeNullable[Seq[String]] and
@@ -356,7 +350,7 @@ object Formats {
       (__ \ "Entrypoint").writeNullable[Seq[String]] and
       (__ \ "NetworkDisabled").writeNullable[Boolean] and
       (__ \ "OnBuild").writeNullable[Seq[String]] and
-        (__ \ "HostConfig").writeNullable[ContainerHostConfiguration])(unlift(ContainerConfiguration.unapply)))
+        (__ \ "RestartPolicy").writeNullable[ContainerRestartPolicy])(unlift(ContainerConfiguration.unapply)))
 
   implicit val containerInfoFmt = Format(
     (
