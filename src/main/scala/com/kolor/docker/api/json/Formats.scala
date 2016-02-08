@@ -193,7 +193,9 @@ object Formats {
     (
       (__ \ "Name").read[String] and
       (__ \ "MaximumRetryCount").read[Int])(ContainerRestartPolicy.apply _),
-    Json.writes[ContainerRestartPolicy])
+    (
+      (__ \ "Name").write[String] and
+      (__ \ "MaximumRetryCount").write[Int])(unlift(ContainerRestartPolicy.unapply)))
 
   implicit val portBindFmt = Format(
     (
@@ -330,7 +332,7 @@ object Formats {
       (__ \ "Entrypoint").readNullable[Seq[String]] and
       (__ \ "NetworkDisabled").readNullable[Boolean] and
       (__ \ "OnBuild").readNullable[Seq[String]] and
-        (__ \ "RestartPolicy").readNullable[ContainerRestartPolicy])(ContainerConfiguration.apply _),
+        (__ \ "HostConfig").readNullable[ContainerHostConfiguration])(ContainerConfiguration.apply _),
     (
       (__ \ "Image").writeNullable[String] and
       (__ \ "Cmd").writeNullable[Seq[String]] and
@@ -354,7 +356,7 @@ object Formats {
       (__ \ "Entrypoint").writeNullable[Seq[String]] and
       (__ \ "NetworkDisabled").writeNullable[Boolean] and
       (__ \ "OnBuild").writeNullable[Seq[String]] and
-        (__ \ "RestartPolicy").writeNullable[ContainerRestartPolicy])(unlift(ContainerConfiguration.unapply)))
+        (__ \ "HostConfig").writeNullable[ContainerHostConfiguration])(unlift(ContainerConfiguration.unapply)))
 
   implicit val containerInfoFmt = Format(
     (

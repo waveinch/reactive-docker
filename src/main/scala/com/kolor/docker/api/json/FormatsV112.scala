@@ -287,7 +287,7 @@ object FormatsV112 {
       (__ \ "Entrypoint").readNullable[Seq[String]] and
       (__ \ "NetworkDisabled").readNullable[Boolean] and
       (__ \ "OnBuild").readNullable[Seq[String]] and
-        (__ \ "RestartPolicy").readNullable[ContainerRestartPolicy](Formats.containerRestartPolicyFmt))(ContainerConfiguration.apply _),
+        (__ \ "HostConfig").readNullable[ContainerHostConfiguration])(ContainerConfiguration.apply _),
     (
       (__ \ "Image").writeNullable[String] and
       (__ \ "Cmd").writeNullable[Seq[String]] and
@@ -311,7 +311,7 @@ object FormatsV112 {
       (__ \ "Entrypoint").writeNullable[Seq[String]] and
       (__ \ "NetworkDisabled").writeNullable[Boolean] and
       (__ \ "OnBuild").writeNullable[Seq[String]] and
-        (__ \ "RestartPolicy").writeNullable[ContainerRestartPolicy](Formats.containerRestartPolicyFmt)
+        (__ \ "HostConfig").writeNullable[ContainerHostConfiguration]
       )(unlift(ContainerConfiguration.unapply)))
 
   implicit val containerInfoFmt = Format(
