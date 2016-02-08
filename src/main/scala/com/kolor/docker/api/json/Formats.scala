@@ -25,8 +25,6 @@ trait PartialFormat[T <: DockerEntity] extends Format[T] {
 
 object Formats {
 
-  implicit def restartFormatter = Json.format[ContainerRestartPolicy]
-
   implicit def String2ISODateTime(s: String) = new ISODateTimeString(s)
 
   implicit def int2Boolean(i: Int) = i match {
@@ -87,6 +85,7 @@ object Formats {
   // Json writer to serialize DockerVolumes into string array 
   implicit val dockerVolumeFmt = Json.format[DockerVolume]
 
+  implicit val containerRestartPolicyFmt = Json.format[ContainerRestartPolicy]
     
   val dateTimeToIsoWrite: Writes[org.joda.time.DateTime] = new Writes[org.joda.time.DateTime] {
     def writes(dt: org.joda.time.DateTime): JsValue = JsString(org.joda.time.format.ISODateTimeFormat.dateTime().print(dt))
