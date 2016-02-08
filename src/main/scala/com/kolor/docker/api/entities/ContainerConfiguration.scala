@@ -25,7 +25,7 @@ sealed case class ContainerConfiguration(
     entryPoint: Option[Seq[String]] = None,
     networkDisabled: Option[Boolean] = Some(false),
     onBuild: Option[Seq[String]] = None,
-    restartPolicy: Option[ContainerRestartPolicy] = None
+    hostConfig: Option[ContainerHostConfiguration] = None
 ) extends DockerEntity
 
 object ContainerConfig {
